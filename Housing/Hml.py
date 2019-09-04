@@ -32,15 +32,23 @@ def pre_proc(df):
     return df
 def training(df):
     df = pre_proc(df)
+    
+    
 #     model=XGBRegressor()
     model=RandomForestRegressor()
     sc = StandardScaler()
     
     y = df["median_house_value"]
     X = df.drop(["median_house_value"], axis="columns")
+    
+    dummyRow = pd.DataFrame(np.zeros(len(X.columns)).reshape(1, len(X.columns)), columns=X.columns)    
+    dummyRow.to_csv("dummyRow.csv", index=False)   
+    
     X = sc.fit_transform(X)
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2,random_state=5)  
-     
+    
+    
+    
     model.fit(X_train, y_train)
     print(model.score(X_test,y_test))  
     
